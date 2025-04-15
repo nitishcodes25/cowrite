@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { useEditorStore } from "@/store/use-editor-store";
 import { LucideIcon, Undo2Icon } from "lucide-react";
 
 interface ToolbarButtonProps {
@@ -27,6 +28,7 @@ const ToolbarButton = ({
   );
 };
 const Toolbar = () => {
+  const {editor} = useEditorStore()
   const options: {
     label: string;
     onClick: () => void;
@@ -36,9 +38,7 @@ const Toolbar = () => {
     [
       {
         label: "Undo",
-        onClick: () => {
-          console.log("clicked");
-        },
+        onClick: () => editor?.chain().focus().undo().run(),
         icon: Undo2Icon,
       },
     ],
