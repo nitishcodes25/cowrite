@@ -7,6 +7,7 @@ import {
   BoldIcon,
   ChevronDownIcon,
   HighlighterIcon,
+  ImageIcon,
   ItalicIcon,
   Link2Icon,
   ListTodoIcon,
@@ -15,16 +16,26 @@ import {
   PrinterIcon,
   Redo2Icon,
   RemoveFormatting,
+  SearchIcon,
   SpellCheckIcon,
   UnderlineIcon,
   Undo2Icon,
+  UploadIcon,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
-} from "@radix-ui/react-dropdown-menu";
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogFooter,
+  DialogHeader,
+} from "@/components/ui/dialog";
 import { ColorResult, SketchPicker } from "react-color";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -183,26 +194,27 @@ const HighlightColorButton = () => {
 };
 
 const LinkButton = () => {
-  const regex = /^(https?:\/\/)?(www\.)?[a-zA-Z0-9\-]+\.[a-zA-Z]{2,}$/
+  const regex = /^(https?:\/\/)?(www\.)?[a-zA-Z0-9\-]+\.[a-zA-Z]{2,}$/;
   const { editor } = useEditorStore();
-  const [value, setValue] = useState<string>(editor?.getAttributes('link').href || "");
+  const [value, setValue] = useState<string>(
+    editor?.getAttributes("link").href || ""
+  );
 
-  const onChange = (href:string) => {
-    editor?.chain().focus().extendMarkRange("link").setLink({href}).run()
-    setValue("")
-  }
+  const onChange = (href: string) => {
+    editor?.chain().focus().extendMarkRange("link").setLink({ href }).run();
+    setValue("");
+  };
   return (
-    <DropdownMenu 
-    onOpenChange={(open)=>{
-      if(open){
-        setValue(editor?.getAttributes('link').href || "")
-      }
-    }}>
+    <DropdownMenu
+      onOpenChange={(open) => {
+        if (open) {
+          setValue(editor?.getAttributes("link").href || "");
+        }
+      }}
+    >
       <DropdownMenuTrigger asChild>
-        <button 
-        className="h-7 min-w-7 shrink-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80 "
-        >
-          <Link2Icon className="size-4"  />
+        <button className="h-7 min-w-7 shrink-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80 ">
+          <Link2Icon className="size-4" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="border-0 p-0 z-10">
@@ -213,15 +225,92 @@ const LinkButton = () => {
             onChange={(e) => setValue(e.target.value)}
             className="focus-visible:border-[1.5px] focus-visible:border-black focus-visible:ring-[0px]"
           />
-          <Button 
-            onClick={()=>onChange(value)}
-            disabled={!regex.test(value)}
-          >
+          <Button onClick={() => onChange(value)} disabled={!regex.test(value)}>
             Apply
-            </Button>
+          </Button>
         </div>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+};
+
+const ImageButton = () => {
+  const { editor } = useEditorStore();
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+
+  const onChange = (src: string) => {
+    editor?.chain().focus().setImage({ src }).run();
+  };
+
+  const onUpload = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const url = URL.createObjectURL(file);
+        onChange(url);
+      }
+    };
+    input.click();
+  };
+
+  const handleImageUrlSubmit = () => {
+    onChange(imageUrl);
+    setImageUrl("");
+    setIsDialogOpen(false);
+  };
+  return (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button className="h-7 min-w-7 shrink-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80 ">
+            <ImageIcon className="size-4" />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="bg-white z-10 shadow-md rounded-sm gap-y-1 p-1 ">
+          <DropdownMenuItem
+            className="flex items-center p-2 cursor-pointer rounded-sm hover:bg-neutral-200/80 hover:outline-none"
+            onClick={onUpload}
+          >
+            <UploadIcon className="size-4 mr-2" />
+            <p className="text-sm">Upload Image</p>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="flex items-center p-2 cursor-pointer rounded-sm hover:bg-neutral-200/80 hover:outline-none"
+            onClick={() => setIsDialogOpen(true)}
+          >
+            <SearchIcon className="size-4 mr-2" />
+            <p className="text-sm">Insert image URL</p>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-md w-full bg-white rounded-sm shadow-xl">
+          <DialogHeader>
+            <DialogTitle>Insert image URL</DialogTitle>
+          </DialogHeader>
+          <Input
+            placeholder="Insert image URL"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleImageUrlSubmit();
+              }
+            }}
+            className="focus-visible:border-[1.5px] focus-visible:border-black focus-visible:ring-[0px]"
+          />
+          <DialogFooter>
+            <Button onClick={handleImageUrlSubmit}>Insert</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
@@ -339,7 +428,7 @@ const Toolbar = () => {
       <HighlightColorButton />
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
       <LinkButton />
-      {/*Image*/}
+      <ImageButton />
       {/*Align*/}
       {/*Line height*/}
       {/*List*/}
