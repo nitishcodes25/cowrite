@@ -4,12 +4,18 @@ import { cn } from "@/lib/utils";
 import { type Level } from "@tiptap/extension-heading";
 import { useEditorStore } from "@/store/use-editor-store";
 import {
+  AlignCenterIcon,
+  AlignJustifyIcon,
+  AlignLeftIcon,
+  AlignRightIcon,
   BoldIcon,
   ChevronDownIcon,
   HighlighterIcon,
   ImageIcon,
   ItalicIcon,
   Link2Icon,
+  ListIcon,
+  ListOrderedIcon,
   ListTodoIcon,
   LucideIcon,
   MessageSquarePlusIcon,
@@ -314,6 +320,102 @@ const ImageButton = () => {
   );
 };
 
+const AlignButton = () => {
+  const { editor } = useEditorStore();
+  const alignments = [
+    {
+      label: "Align Left",
+      icon: AlignLeftIcon,
+      onClick: () => editor?.chain().focus().setTextAlign("left").run(),
+      isActive: () => editor?.isActive({ textAlign: "left" }),
+    },
+    {
+      label: "Align Center",
+      icon: AlignCenterIcon,
+      onClick: () => editor?.chain().focus().setTextAlign("center").run(),
+      isActive: () => editor?.isActive({ textAlign: "center" }),
+    },
+    {
+      label: "Align Right",
+      icon: AlignRightIcon,
+      onClick: () => editor?.chain().focus().setTextAlign("right").run(),
+      isActive: () => editor?.isActive({ textAlign: "right" }),
+    },
+    {
+      label: "Align Justify",
+      icon: AlignJustifyIcon,
+      onClick: () => editor?.chain().focus().setTextAlign("justify").run(),
+      isActive: () => editor?.isActive({ textAlign: "justify" }),
+    },
+  ];
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className="h-7 min-w-7 flex items-center justify-center rounded-sm hover:bg-neutral-200/80 ">
+          <AlignLeftIcon className="size-4" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="p-1 flex flex-col gap-y-1">
+        {alignments.map(({ label, onClick, isActive, icon: Icon }) => (
+          <button
+            key={label}
+            onClick={onClick}
+            className={cn(
+              "flex items-center gap-x-2 rounded-sm px-2 py-1 hover:bg-neutral-200/80",
+              isActive() && "bg-neutral-200/80"
+            )}
+          >
+            <Icon className="size-4" />
+            <span className="text-sm">{label}</span>
+          </button>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+const ListButton = () => {
+  const { editor } = useEditorStore();
+  const lists = [
+    {
+      label: "Bullet List",
+      icon: ListIcon,
+      onClick: () => editor?.chain().focus().toggleBulletList().run(),
+      isActive: () => editor?.isActive('bulletList'),
+    },
+    {
+      label: "Ordered List",
+      icon: ListOrderedIcon,
+      onClick: () => editor?.chain().focus().toggleOrderedList().run(),
+      isActive: () => editor?.isActive('orderedList')
+    },
+  ];
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className="h-7 min-w-7 flex items-center justify-center rounded-sm hover:bg-neutral-200/80 ">
+          <ListIcon className="size-4" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="p-1 flex flex-col gap-y-1">
+        {lists.map(({ label, onClick, isActive, icon: Icon }) => (
+          <button
+            key={label}
+            onClick={onClick}
+            className={cn(
+              "flex items-center gap-x-2 rounded-sm px-2 py-1 hover:bg-neutral-200/80",
+              isActive() && "bg-neutral-200/80"
+            )}
+          >
+            <Icon className="size-4" />
+            <span className="text-sm">{label}</span>
+          </button>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
 const ToolbarButton = ({
   onClick,
   isActive,
@@ -429,9 +531,9 @@ const Toolbar = () => {
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
       <LinkButton />
       <ImageButton />
-      {/*Align*/}
+      <AlignButton />
       {/*Line height*/}
-      {/*List*/}
+      <ListButton/>
       {options[2].map((option) => (
         <ToolbarButton key={option.label} {...option} />
       ))}

@@ -141,10 +141,10 @@
   }
 }
 
-.tiptap{
+.tiptap {
   /* Link styles */
   a {
-    @apply  text-blue-600;
+    @apply text-blue-600;
     cursor: pointer;
 
     &:hover {
@@ -166,97 +166,100 @@
 
   /*table styling*/
   table {
-  border-collapse: collapse;
-  margin: 0;
-  overflow: hidden;
-  table-layout: fixed;
-  width: 100%;
-  border: 1px solid black;
-
-  td,
-  th {
+    border-collapse: collapse;
+    margin: 0;
+    overflow: hidden;
+    table-layout: fixed;
+    width: 100%;
     border: 1px solid black;
-    box-sizing: border-box;
-    min-width: 1em;
-    padding: 6px 8px;
-    position: relative;
-    vertical-align: top;
 
-    > * {
-      margin-bottom: 0;
+    td,
+    th {
+      border: 1px solid black;
+      box-sizing: border-box;
+      min-width: 1em;
+      padding: 6px 8px;
+      position: relative;
+      vertical-align: top;
+
+      > * {
+        margin-bottom: 0;
+      }
+    }
+
+    th {
+      background-color: #c7c7c7;
+      font-weight: bold;
+      text-align: left;
+    }
+
+    .selectedCell:after {
+      background: #848484;
+      content: "";
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      pointer-events: none;
+      position: absolute;
+      z-index: 2;
+    }
+
+    .column-resize-handle {
+      background-color: var(--primary);
+      bottom: -2px;
+      pointer-events: none;
+      position: absolute;
+      right: -2px;
+      top: 0;
+      width: 4px;
     }
   }
 
-  th {
-    background-color: #c7c7c7;
-    font-weight: bold;
-    text-align: left;
+  .tableWrapper {
+    margin: 1.5rem 0;
+    overflow-x: auto;
   }
 
-  .selectedCell:after {
-    background: #848484;
-    content: "";
-    left: 0; right: 0; top: 0; bottom: 0;
-    pointer-events: none;
-    position: absolute;
-    z-index: 2;
+  &.resize-cursor {
+    cursor: ew-resize;
+    cursor: col-resize;
   }
 
-  .column-resize-handle {
-    background-color: var(--primary);
-    bottom: -2px;
-    pointer-events: none;
-    position: absolute;
-    right: -2px;
-    top: 0;
-    width: 4px;
-  }
-}
-
-.tableWrapper {
-  margin: 1.5rem 0;
-  overflow-x: auto;
-}
-
-&.resize-cursor {
-  cursor: ew-resize;
-  cursor: col-resize;
-}
-
-   /*heading styling*/
-  h1, 
-  h2, 
-  h3, 
-  h4, 
-  h5, 
+  /*heading styling*/
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
   h6 {
     line-height: 1.1;
     margin-top: 2.5rem;
     text-wrap: pretty;
   }
 
-  h1, 
+  h1,
   h2 {
     margin-top: 3.5rem;
     margin-bottom: 1.5rem;
   }
 
-  h1 { 
-    font-size: 1.4rem; 
+  h1 {
+    font-size: 1.4rem;
   }
 
-  h2 { 
-    font-size: 1.2rem; 
+  h2 {
+    font-size: 1.2rem;
   }
 
-  h3 { 
-    font-size: 1.1rem; 
+  h3 {
+    font-size: 1.1rem;
   }
 
-  h4, 
-  h5, 
-  h6 { 
-    font-size: 1rem; 
+  h4,
+  h5,
+  h6 {
+    font-size: 1rem;
   }
 
   /*Task list styling*/
@@ -290,25 +293,20 @@
   }
 
   /*Bullet list styling*/
-  ul, 
+  ul,
   ol {
     padding: 0 1rem;
     margin: 1.25rem 1rem 1.25rem 0.4rem;
   }
-
-  ul,li{
+  ul li {
     list-style-type: disc;
-    p {
-      margin-top: 0.25em;
-      margin-bottom: 0.25em;
-    }
+  }
+  ol li {
+    list-style-type: decimal;
   }
 
-  ol,li{
-    list-style-type: decimal;
-    p {
-      margin-top: 0.25em;
-      margin-bottom: 0.25em;
-    }
+  li p {
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
   }
 }

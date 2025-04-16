@@ -14,6 +14,7 @@ import FontFamily from '@tiptap/extension-font-family'
 import { Color } from '@tiptap/extension-color'
 import Highlight from '@tiptap/extension-highlight'
 import Link from '@tiptap/extension-link'
+import TextAlign from '@tiptap/extension-text-align'
 import StarterKit from "@tiptap/starter-kit";
 import { useEditorStore } from "@/store/use-editor-store";
 import TextStyle from "@tiptap/extension-text-style";
@@ -76,11 +77,10 @@ const Editor = () => {
         autolink: true,
         defaultProtocol: 'https',
       }),
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
     ],
-    content: `
-      <p>This is a basic example of implementing images. Drag to re-order.</p>
-       <img src="https://placehold.co/800x400" />
-       `,
   });
   return (
     <div className="size-full overflow-x-auto bg-[#F9FBFD] px-4 print:p-0 print:bg-white print:overflow-visible">
