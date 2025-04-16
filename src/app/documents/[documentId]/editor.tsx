@@ -11,6 +11,8 @@ import Image from '@tiptap/extension-image'
 import ImageResize from 'tiptap-extension-resize-image';
 import Underline from '@tiptap/extension-underline'
 import FontFamily from '@tiptap/extension-font-family'
+import { Color } from '@tiptap/extension-color'
+import Highlight from '@tiptap/extension-highlight'
 import StarterKit from "@tiptap/starter-kit";
 import { useEditorStore } from "@/store/use-editor-store";
 import TextStyle from "@tiptap/extension-text-style";
@@ -65,7 +67,9 @@ const Editor = () => {
       ImageResize,
       Underline,
       FontFamily,
-      TextStyle
+      TextStyle,
+      Color,
+      Highlight.configure({ multicolor: true })
     ],
     content: `
       <p>This is a basic example of implementing images. Drag to re-order.</p>

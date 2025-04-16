@@ -6,6 +6,7 @@ import { useEditorStore } from "@/store/use-editor-store";
 import {
   BoldIcon,
   ChevronDownIcon,
+  HighlighterIcon,
   ItalicIcon,
   ListTodoIcon,
   LucideIcon,
@@ -23,6 +24,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
 } from "@radix-ui/react-dropdown-menu";
+import { ColorResult, SketchPicker } from 'react-color'
 
 interface ToolbarButtonProps {
   onClick?: () => void;
@@ -122,6 +124,45 @@ const HeadingLevelButton = () => {
             <span>{label}</span>
           </button>
         ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+const TextColorButton = () => {
+  const {editor} = useEditorStore()
+  const value = editor?.getAttributes('textStyle').color || '#000000'
+  return(
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className="h-7 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm">
+          <span className="text-xs">A</span>
+          <div className="h-0.5 w-full" style={{backgroundColor: value}}/>
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="border-0 p-0 z-10">
+        <SketchPicker 
+          color={value}
+          onChange={(color:ColorResult)=> editor?.chain().focus().setColor(color.hex).run()}
+        />
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+const HighlightColorButton = () => {
+  const {editor} = useEditorStore()
+  const value= editor?.getAttributes('highlight').color || '#FFFFFF'
+  return(
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <HighlighterIcon className="size-4"/>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="border-0 p-0 z-10">
+        <SketchPicker 
+          color={value}
+          onChange={(color:ColorResult)=> editor?.chain().focus().setHighlight({color:color.hex}).run()}
+        />
       </DropdownMenuContent>
     </DropdownMenu>
   )
@@ -237,8 +278,8 @@ const Toolbar = () => {
       {options[1].map((option) => (
         <ToolbarButton key={option.label} {...option} />
       ))}
-      {/*Text color*/}
-      {/*Highlight  color*/}
+      <TextColorButton/>
+      <HighlightColorButton/>
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
       {/*Link*/}
       {/*Image*/}
