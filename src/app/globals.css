@@ -142,6 +142,16 @@
 }
 
 .tiptap{
+  /* Link styles */
+  a {
+    @apply  text-blue-600;
+    cursor: pointer;
+
+    &:hover {
+      @apply underline;
+    }
+  }
+
   /*image styling*/
   img {
     display: block;
