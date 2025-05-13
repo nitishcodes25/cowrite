@@ -19,6 +19,8 @@ import StarterKit from "@tiptap/starter-kit";
 import { useEditorStore } from "@/store/use-editor-store";
 import TextStyle from "@tiptap/extension-text-style";
 
+import { FontSizeExtension } from "@/extensions/font-size";
+
 const Editor = () => {
   const {setEditor} = useEditorStore()
   const editor = useEditor({
@@ -55,6 +57,7 @@ const Editor = () => {
     },
     extensions: [
       StarterKit,
+      FontSizeExtension,
       TaskList,
       TaskItem.configure({
         nested: true,
