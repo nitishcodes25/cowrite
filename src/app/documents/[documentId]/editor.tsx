@@ -20,6 +20,7 @@ import { useEditorStore } from "@/store/use-editor-store";
 import TextStyle from "@tiptap/extension-text-style";
 
 import { FontSizeExtension } from "@/extensions/font-size";
+import { LineHeightExtension } from "@/extensions/line-height";
 
 const Editor = () => {
   const {setEditor} = useEditorStore()
@@ -58,6 +59,10 @@ const Editor = () => {
     extensions: [
       StarterKit,
       FontSizeExtension,
+      LineHeightExtension.configure({
+        types: ['paragraph','heading'],
+        defaultLineHeight: 'normal'
+      }),
       TaskList,
       TaskItem.configure({
         nested: true,
